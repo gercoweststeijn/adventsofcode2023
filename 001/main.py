@@ -54,7 +54,6 @@ def part_one(filename: str) -> str:
             print('-----------')
             print ('error')
             print (line)
-
             print('-----------')
         #print (additional)
         sum = sum + int(additional)
