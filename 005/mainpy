@@ -1,0 +1,118 @@
+
+def look_up (i, parts, depth):
+    i = int(i)
+    first = True
+    found_val = 0
+    for line in parts[depth].split('\n'):
+        if first:
+            first = False
+            continue
+        else: 
+            
+            dest,source, length = line.strip().split(' ')
+            source = int(source)
+            dest = int(dest)
+            length = int (length)
+            if i >= source and i < (source + length):                
+                found_val = dest + (i-source)
+
+    if found_val == 0:
+        found_val = i    
+
+#    print (found_val)
+    depth = depth + 1
+    if depth < len(parts):
+      return look_up (i=found_val, parts=parts, depth=depth)
+    else:
+        return found_val
+
+
+def look_up_range (range, parts, depth):
+    
+    first = True
+    found_val = 0
+    for line in parts[depth].split('\n'):
+        if first:
+            first = False
+            continue
+        else: 
+            dest,source, length = line.strip().split(' ')
+            source = int(source)
+            dest = int(dest)
+            length = int (length)
+
+            A = []
+            source_end = source+length
+            new_range = []
+            while range:
+                
+                (st,ed) = range.pop()
+
+                # (source,length) might cut (st,ed)
+                before = (st,min(ed,source))
+                inter = (max(st, source), min(source_end, ed))
+                after = (max(source_end, st), ed)
+                if int(before[1])>int(before[0]):
+                    new_range.append(before)
+                if int(inter[1])>int(inter[0]):
+                    A.append((inter[0]-source+dest, inter[1]-source+dest))
+                if int(after[1])>int(after[0]):
+                    new_range.append(after)
+            range = new_range
+    return A+range
+
+
+    
+
+#    print (found_val)
+    depth = depth + 1
+    if depth < len(parts):
+      return look_up (i=found_val, parts=parts, depth=depth)
+    else:
+        return found_val
+
+def part_one(filename: str) -> str:
+    with open(filename, encoding="utf-8") as f:
+        parts = f.read().split(("\n\n"))
+
+        initial, seeds = parts[0].strip().split(':')
+        seeds = seeds.strip().split(' ') 
+        
+        min_value = 999999999
+        for seed in seeds:
+
+            val = look_up (i = seed, parts=parts, depth=1)
+#            print('-----------------')
+#            print (val)
+#            print('-----------------')
+            if val < min_value:
+                min_value = val
+
+    return min_value
+
+def part_two(filename: str) -> str:
+    pair2 = []
+    with open(filename, encoding="utf-8") as f:
+        parts = f.read().split(("\n\n"))
+
+        initial, seeds = parts[0].strip().split(':')
+        seed_values = [int(x) for x in seeds.strip().split(' ')]
+
+        min_val = 999999999999999
+        seed_pairs =  list(zip(seed_values[::2], seed_values[1::2]))
+        for start, length in seed_pairs: 
+            R = [(start, start+length)]    
+            return_values = look_up_range (range = R, parts=parts, depth=1)
+            pair2.append(return_values)
+  
+
+    return pair2
+
+
+if __name__ == "__main__":
+    input_path = "./005/tst.txt"
+#    print("---Part One---")
+#    print(part_one(input_path))
+
+    print("---Part two---")
+    print(part_two(input_path))
