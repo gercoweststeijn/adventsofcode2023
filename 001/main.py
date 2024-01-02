@@ -54,7 +54,6 @@ def part_one(filename: str) -> str:
             print('-----------')
             print ('error')
             print (line)
-
             print('-----------')
         #print (additional)
         sum = sum + int(additional)
@@ -69,9 +68,6 @@ def part_two(filename: str) -> str:
     sum = 0
     for line in lines:
 
-        # first check for a written number, in any
-        # next check if to the left substr contains a number char
-        # > if so overwrite the found written number
         pos1,part1 = left_most_written(line)
         if part1 != '':
             part1 = str(written_numbers.index(part1))
@@ -87,7 +83,7 @@ def part_two(filename: str) -> str:
             
 
             
-        # same but to the right
+
         pos2,part2 = right_most_written(line)
         if part2 !='':
             part2 = str(written_numbers.index(part2))
